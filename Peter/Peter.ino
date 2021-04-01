@@ -11,6 +11,11 @@
 int btnValue;
 int previous = 0;
 int value = 0;
+String str;
+int index_1;
+int index_2;
+int index_3;
+int index_4;
 
 // defining RTC and DHT parameter
 RTC_DS3231 rtc;
@@ -36,6 +41,59 @@ void time_(){
   
 }
 
+// Index loop
+void index(String str){
+  index_1 = str.indexOf(1);
+  switch (index_1){
+    case 0:
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+  }
+
+  index_2 = str.indexOf(2);
+  switch (index_2){
+    case 0:
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+  }
+
+  index_3 = str.indexOf(3);
+  switch (index_3){
+    case 0:
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+  }
+
+  index_4 = str.indexOf(4);
+  switch (index_4){
+    case 0:
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+  }
+}
+
+
+
 void loop() {
   // read input from button
   btnValue = digitalRead(BUTTON);
@@ -56,4 +114,8 @@ void loop() {
       break;
 }
   previous == btnValue;
+
+
+  // ______________________
+    
 }
