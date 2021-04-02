@@ -32,6 +32,14 @@
 #define TRIG16 23
 #define ECHO16 22
 
+// Motor pins
+#define MOTORPIN1 2
+#define MOTORPIN2 3
+#define MOTORPIN3 4
+#define MOTORPIN4 5
+#define ENABLE12 6
+#define ENABLE34 7
+
 // define variables for distance measurement
 float distance1; 
 float distance2; 
@@ -61,30 +69,28 @@ void setup() {
   // Set TRIG pins as output
   for (int i = 53; i >= 22; i-=2){
     pinMode(i, OUTPUT);
-  }
+  }  
   // Set ECHO pins as input
   for (int j = 52; j >= 22; j-=2){
     pinMode(j, INPUT);
   }
+  // Set MOTOR pins as output
+  pinMode(MOTORPIN1, OUTPUT);
+  pinMode(MOTORPIN2, OUTPUT);
+  pinMode(MOTORPIN3, OUTPUT);
+  pinMode(MOTORPIN4, OUTPUT);
+  pinMode(ENABLE12, OUTPUT);
+  pinMode(ENABLE34, OUTPUT);
+
+  // Turn off motors - Initial State
+  digitalWrite(MOTORPIN1, LOW);
+  digitalWrite(MOTORPIN2, LOW);
+  digitalWrite(MOTORPIN3, LOW);
+  digitalWrite(MOTORPIN4, LOW);
+  digitalWrite(ENABLE12, LOW);
+  digitalWrite(ENABLE34, LOW);
 }
 
-float dist(int trigPin, int echoPin){
-  // Clear the TRIG pin
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  
-  // Set the TRIG pin active for 10 microseconds
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-
-  // Read the ECHO pin
-  duration = pulseIn(echoPin, HIGH);
-
-  // Calculate the distance
-  distance = duration * 0.034 / 2;
-  return distance;
-}
 
 void loop() {
   // Get distance
@@ -104,5 +110,25 @@ void loop() {
   distance14 = dist(TRIG14, ECHO14);
   distance15 = dist(TRIG15, ECHO15);
   distance16 = dist(TRIG16, ECHO16);
+ 
+}
+
+
+// Function to calculate distance
+float dist(int trigPin, int echoPin){
+  // Clear the TRIG pin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
   
+  // Set the TRIG pin active for 10 microseconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read the ECHO pin
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate the distance
+  distance = duration * 0.034 / 2;
+  return distance;
 }
