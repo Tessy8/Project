@@ -1,4 +1,5 @@
 // Ultrasonic sensor pins
+// Front
 #define TRIG1 53
 #define ECHO1 52
 #define TRIG2 51
@@ -7,6 +8,7 @@
 #define ECHO3 48
 #define TRIG4 47
 #define ECHO4 46
+// Back
 #define TRIG5 45
 #define ECHO5 44
 #define TRIG6 43
@@ -15,6 +17,7 @@
 #define ECHO7 40
 #define TRIG8 39
 #define ECHO8 38
+// Right
 #define TRIG9 37
 #define ECHO9 36
 #define TRIG10 35
@@ -23,6 +26,7 @@
 #define ECHO11 32
 #define TRIG12 31
 #define ECHO12 30
+// Left
 #define TRIG13 29
 #define ECHO13 28
 #define TRIG14 27
@@ -33,10 +37,10 @@
 #define ECHO16 22
 
 // Motor pins
-#define MOTORPIN1 2
-#define MOTORPIN2 3
-#define MOTORPIN3 4
-#define MOTORPIN4 5
+#define LEFTFORWARD 2
+#define LEFTBACKWARD 3
+#define RIGHTFORWARD 4
+#define RIGHTBACKWARD 5
 #define ENABLE12 6
 #define ENABLE34 7
 
@@ -58,6 +62,12 @@ float distance14;
 float distance15; 
 float distance16; 
 
+// define variables for average
+float avg1;
+float avg2;
+float avg3;
+float avg4;
+
 // define variables
 int trigPin;
 int echoPin;
@@ -75,18 +85,18 @@ void setup() {
     pinMode(j, INPUT);
   }
   // Set MOTOR pins as output
-  pinMode(MOTORPIN1, OUTPUT);
-  pinMode(MOTORPIN2, OUTPUT);
-  pinMode(MOTORPIN3, OUTPUT);
-  pinMode(MOTORPIN4, OUTPUT);
+  pinMode(LEFTFORWARD, OUTPUT);
+  pinMode(LEFTBACKWARD, OUTPUT);
+  pinMode(RIGHTFORWARD, OUTPUT);
+  pinMode(RIGHTBACKWARD, OUTPUT);
   pinMode(ENABLE12, OUTPUT);
   pinMode(ENABLE34, OUTPUT);
 
   // Turn off motors - Initial State
-  digitalWrite(MOTORPIN1, LOW);
-  digitalWrite(MOTORPIN2, LOW);
-  digitalWrite(MOTORPIN3, LOW);
-  digitalWrite(MOTORPIN4, LOW);
+  digitalWrite(LEFTFORWARD, LOW);
+  digitalWrite(LEFTBACKWARD, LOW);
+  digitalWrite(RIGHTFORWARD, LOW);
+  digitalWrite(RIGHTBACKWARD, LOW);
   digitalWrite(ENABLE12, LOW);
   digitalWrite(ENABLE34, LOW);
 }
@@ -110,7 +120,44 @@ void loop() {
   distance14 = dist(TRIG14, ECHO14);
   distance15 = dist(TRIG15, ECHO15);
   distance16 = dist(TRIG16, ECHO16);
- 
+
+  avg1 = avg(distance1, distance2, distance3, distance4);     // Front
+  avg2 = avg(distance5, distance6, distance7, distance8);     // Back
+  avg3 = avg(distance9, distance10, distance11, distance12);  // Right
+  avg4 = avg(distance13, distance14, distance15, distance16); // Left
+  
+  // Enable the motors
+  digitalWrite(ENABLE12, HIGH);
+  digitalWrite(ENABLE34, HIGH);
+
+  // Move forward
+  if (avg1 > 10){
+    forward();
+  }else{
+    float num = maxNumber(avg1, avg2, avg3, avg4);         // Maximum of the numbers
+    if (num == avg1 && avg1 > 10){
+      // Continue moving
+      forward();
+    }else if (num == avg2 && avg2 > 10){
+      // Turn 180 degrees
+
+      // then move forward
+      forward();
+    }else if (num == avg3 && avg3 > 10){
+      //Turn to the right
+
+      // then move forward
+      forward();
+    }else if (num == avg4 && avg4 > 10){
+      //Turn to the left
+
+      // then move forward
+      forward();
+    }else{
+      // Stop
+      halt();
+    }
+  }
 }
 
 
@@ -131,4 +178,34 @@ float dist(int trigPin, int echoPin){
   // Calculate the distance
   distance = duration * 0.034 / 2;
   return distance;
+}
+
+// Function to calculate average of distances
+float avg(float dist1, float dist2, float dist3,float dist4){
+  float mean = (dist1 + dist2 + dist3 + dist4)/4;
+  return mean;
+}
+
+// Function to calculate maximum of three numbers
+float maxNumber(float first, float secnd, float third, float fourth){
+  float maxNum = max(first, secnd);
+  maxNum = max(maxNum, third);
+  maxNum = max(maxNum, fourth);
+  return maxNum;
+}
+
+// Function for robot to move forward
+void forward(){
+  digitalWrite(LEFTFORWARD, HIGH);
+  digitalWrite(LEFTBACKWARD, LOW);
+  digitalWrite(RIGHTFORWARD, HIGH);
+  digitalWrite(RIGHTBACKWARD, LOW);  
+}
+
+// Function for robot to stop
+void halt(){
+  digitalWrite(LEFTFORWARD, LOW);
+  digitalWrite(LEFTBACKWARD, LOW);
+  digitalWrite(RIGHTFORWARD, LOW);
+  digitalWrite(RIGHTBACKWARD, LOW);  
 }
