@@ -8,9 +8,19 @@
 #define DHTPIN 2        // DHT Pin
 #define DHTTYPE DHT11   // DHT Type
 
+// Variables for button switching
 int btnValue;
 int previous = 0;
 int value = 0;
+
+// Vriable holding time
+String str;
+
+// Variables holding time positions
+int index_1;
+int index_2;
+int index_3;
+int index_4;
 
 // defining RTC and DHT parameter
 RTC_DS3231 rtc;
@@ -33,6 +43,91 @@ void temp(){
 
 // Time loop
 void time_(){
+  // Checks for first number in the time
+  index_1 = str[0];
+  switch(index_1){
+    case 0:
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    default:
+      break;
+  }
+
+  // Checks for second number in the time
+  index_2 = str[1];
+  switch(index_2){
+    case 0:
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+    case 4:
+      break;
+    case 5:
+      break;
+    case 6:
+      break;
+    case 7:
+      break;
+    case 8:
+      break;
+    case 9:
+      break;
+    default:
+      break;
+  }
+
+  // Checks for third number in the time
+  index_3 = str[2];
+  switch(index_3){
+    case 0:
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+    case 4:
+      break;
+    case 5:
+      break;
+    default:
+      break;
+  }
+
+  // Checks for fourth number in the time
+  index_4 = str[3];
+  switch(index_4){
+    case 0:
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+    case 4:
+      break;
+    case 5:
+      break;
+    case 6:
+      break;
+    case 7:
+      break;
+    case 8:
+      break;
+    case 9:
+      break;
+    default:
+      break;
+  }
   
 }
 
@@ -56,4 +151,8 @@ void loop() {
       break;
 }
   previous == btnValue;
+
+
+  // ______________________
+    
 }
