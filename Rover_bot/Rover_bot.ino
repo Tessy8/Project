@@ -140,17 +140,17 @@ void loop() {
       forward();
     }else if (num == avg2 && avg2 > 10){
       // Turn 180 degrees
-
+      back();
       // then move forward
       forward();
     }else if (num == avg3 && avg3 > 10){
       //Turn to the right
-
+      right();
       // then move forward
       forward();
     }else if (num == avg4 && avg4 > 10){
       //Turn to the left
-
+      left();
       // then move forward
       forward();
     }else{
@@ -208,4 +208,31 @@ void halt(){
   digitalWrite(LEFTBACKWARD, LOW);
   digitalWrite(RIGHTFORWARD, LOW);
   digitalWrite(RIGHTBACKWARD, LOW);  
+}
+
+// Function for robot to turn left
+void left(){
+  digitalWrite(LEFTFORWARD, LOW);
+  digitalWrite(LEFTBACKWARD, LOW);
+  digitalWrite(RIGHTFORWARD, HIGH);
+  digitalWrite(RIGHTBACKWARD, LOW);
+  delay(3);  
+}
+
+// Function for robot to turn right
+void right(){
+  digitalWrite(LEFTFORWARD, HIGH);
+  digitalWrite(LEFTBACKWARD, LOW);
+  digitalWrite(RIGHTFORWARD, LOW);
+  digitalWrite(RIGHTBACKWARD, LOW);
+  delay(3);  
+}
+
+// Function for robot to turn to the back
+void back(){
+  digitalWrite(LEFTFORWARD, LOW);
+  digitalWrite(LEFTBACKWARD, LOW);
+  digitalWrite(RIGHTFORWARD, HIGH);
+  digitalWrite(RIGHTBACKWARD, LOW);
+  delay(6);  
 }
