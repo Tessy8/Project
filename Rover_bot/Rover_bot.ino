@@ -216,7 +216,7 @@ void left(){
   digitalWrite(LEFTBACKWARD, LOW);
   digitalWrite(RIGHTFORWARD, HIGH);
   digitalWrite(RIGHTBACKWARD, LOW);
-  delay(3);  
+  delay(3000);  
 }
 
 // Function for robot to turn right
@@ -225,7 +225,7 @@ void right(){
   digitalWrite(LEFTBACKWARD, LOW);
   digitalWrite(RIGHTFORWARD, LOW);
   digitalWrite(RIGHTBACKWARD, LOW);
-  delay(3);  
+  delay(3000);  
 }
 
 // Function for robot to turn to the back
@@ -234,5 +234,5 @@ void back(){
   digitalWrite(LEFTBACKWARD, LOW);
   digitalWrite(RIGHTFORWARD, HIGH);
   digitalWrite(RIGHTBACKWARD, LOW);
-  delay(6);  
+  delay(6000);  
 }
