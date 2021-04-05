@@ -31,6 +31,7 @@ BLYNK_CONNECTED(){
 void setup()
 {
   Blynk.begin(auth, ssid, pass);
+  // Wifi.begin(ssid, pass);
 }
 
 void loop()
