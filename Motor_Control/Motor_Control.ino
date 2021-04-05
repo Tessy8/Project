@@ -15,13 +15,13 @@ void setup() {
 
 void loop() {
   // Forward
-  for (float motorValue = 0; motorValue <= 1023; motorValue += 34.1){
+  for (float motorValue = 0; motorValue <= 255; motorValue += 8.5){
     digitalWrite(REVERSEPIN, LOW);
     analogWrite(FORWARDPIN, motorValue);
     delay(1000);
   }
   // Reverse
-  for (float motorValue = 0; motorValue <= 1023; motorValue += 34.1){
+  for (float motorValue = 0; motorValue <= 255; motorValue += 8.5){
     digitalWrite(FORWARDPIN, LOW);
     analogWrite(REVERSEPIN, motorValue);
     delay(1000);
