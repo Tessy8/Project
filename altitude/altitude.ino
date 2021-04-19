@@ -56,28 +56,22 @@ void setup()
 }
 
 void loop() {
-  double a, P, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10;
+  double a, P;
+  double P1 = 0;
 
-  // Get 5 pressure readings:
-
-  P1 = getPressure();
-  P2 = getPressure();
-  P3 = getPressure();
-  P4 = getPressure();
-  P5 = getPressure();
-  P6 = getPressure();
-  P7 = getPressure();
-  P8 = getPressure();
-  P9 = getPressure();
-  P10 = getPressure();
-
-  // Get the average of the 5 readings
-  P = (P1 + P2 + P3 + P4 + P5 + P6 + P7 + P8 + P9 + P10)/10;
+  // Sample 20 readings:
+  for (int i = 0; i < 20; i++){
+    P = getPressure();
+    if (P > P1){
+      P1 = P;       // Get the highest reading
+    }
+    delay(100);
+  }
   
   // Show the relative altitude difference between
   // the new reading and the baseline reading:
 
-  a = pressure.altitude(P, baseline);
+  a = pressure.altitude(P1, baseline);
 
   Serial.print("relative altitude: ");
   if (a >= 0.0) Serial.print(" "); // add a space for positive numbers
@@ -86,8 +80,6 @@ void loop() {
   if (a >= 0.0) Serial.print(" "); // add a space for positive numbers
   Serial.print(a * 3.28084, 0);
   Serial.println(" feet");
-
-  delay(2000);
 }
 
 
