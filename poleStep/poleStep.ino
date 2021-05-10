@@ -116,15 +116,15 @@ void setup()
    poleStep=7; 
  } 
  int potValue =analogRead(potPin);// read potentiometer value
- int speed = map(potValue,0, 1023, 1,N);
+ int potSpeed = map(potValue,0, 1023, 1,N);
 
- delay(speed); 
+ delay(potSpeed); 
 
 
 }// loop
 
 int calcDelayfromTime(int t){
-  return ((t-5)/4)+1;
+  return (((t-5)/4)+1)*1000;
 }//
 
 
