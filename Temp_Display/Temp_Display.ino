@@ -1,3 +1,19 @@
+/*
+ * Connect Signal pin of DHT11 to pin 2
+ * Place a 10 K ohm resistor between VCC and the data pin, 
+ * to act as a medium-strength pull up on the data line. 
+ * 
+ * For TFT, connect:
+ * LED (backlight)     to   Vcc (3.3v)
+ * 2 SCK (slave clock) to   D13
+ * 3 SDA (MOSI)        to   D4
+ * 4 A0  (DC)          to   D9
+ * 5 RESET             to   D8
+ * 6 CS (SS)           to   D10
+ * 7 Gnd               to   Gnd
+ * 8 Vcc               to  Vcc (3.3v)
+ */
+
 #include "DHT.h"
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7789.h> // Hardware-specific library for ST7735

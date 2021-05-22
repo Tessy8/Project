@@ -1,3 +1,18 @@
+/*
+ * Connect Signal pin of KY039HS to pin A0 
+ * 
+ * For TFT, connect:
+ * LED (backlight)     to   Vcc (3.3v)
+ * 2 SCK (slave clock) to   D13
+ * 3 SDA (MOSI)        to   D4
+ * 4 A0  (DC)          to   D9
+ * 5 RESET             to   D8
+ * 6 CS (SS)           to   D10
+ * 7 Gnd               to   Gnd
+ * 8 Vcc               to  Vcc (3.3v)
+ */
+ 
+
 #define USE_ARDUINO_INTERRUPTS true    // Set-up low-level interrupts for most acurate BPM math.
 
 #include <Adafruit_GFX.h>    // Core graphics library
