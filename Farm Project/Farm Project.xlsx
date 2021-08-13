@@ -1,6 +1,0 @@
-NAME OF SENSOR	STORE	PRICE	REASON
-Soil Moisture Sensor	Amazon	$7.99	To estimate the amount of water in the soil
-LM393 Light Sensor	Amazon	$4.88	To measure the amount of sunlight
-DHT11 Temperature and Humidity Sensor	Amazon	$10.69	To measure the temperature and humidity of the environment
-Taidacent RS485 Soil NPK PH Sensor	Amazon	$185.78	To measure soil fertility
-Modbus Module RS485	Amazon	$10.39	To connect Soil NPK PH Sensor to Microcontroller
