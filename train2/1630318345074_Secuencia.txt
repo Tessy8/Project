@@ -1,0 +1,42 @@
+int t1 = 100;
+bool entrada = false;
+int counter = 2;
+
+void setup()
+{
+  for(int i = 2; i <= 8; i++){
+    pinMode(i, OUTPUT);
+  }  
+}
+
+void loop()
+{  
+  entrada = digitalRead(8);
+  
+  
+    
+    if(entrada == false) {
+    digitalWrite(counter, HIGH);
+    delay(t1); // Wait for 1000 millisecond(s)
+    digitalWrite(counter, LOW);
+    delay(t1); // Wait for 1000 millisecond(s)   
+    }
+    else if(entrada == true) {
+    digitalWrite(counter, HIGH);
+    delay(t1); // Wait for 1000 millisecond(s)
+    digitalWrite(counter, LOW);
+    delay(t1); // Wait for 1000 millisecond(s)   
+    }
+  if(counter > 7) {
+        counter = 2;
+    } else if(counter < 2) {
+      counter = 7;
+    } else {        
+      if(entrada == false) {  
+       counter--;
+      } else {
+        counter++;
+      }
+    }
+  
+}
