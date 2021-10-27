@@ -270,6 +270,10 @@ EnviroDIYPublisher EnviroDIYPOST(dataLogger, &modem.gsmClient,
                                  registrationToken, samplingFeature);
 /** End [publishers] */
 
+
+// URL
+#define URL "http://d3uyjvsgi4dmwc.cloudfront.net/prod/mayflyupload" // URL to do HTTP POST
+
 /*
  * 
  * FOR DREAMHOST
