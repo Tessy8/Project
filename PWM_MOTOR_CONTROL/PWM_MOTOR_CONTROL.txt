@@ -1,0 +1,230 @@
+program PWM_MOTOR_CONTROL
+
+' Declarations section 
+symbol HiA = RC1_bit
+symbol LowA = RC2_bit
+symbol HiB = RC0_bit
+symbol LowB = RC3_bit
+symbol MOTOR_FW = RC4_bit
+symbol MOTOR_Rev = RC5_bit   'reverse
+symbol OFF = 0
+symbol M_FORWORD = 1
+symbol M_REVERSE = 2
+symbol ERROR_OC = 3
+symbol M_BREAK = 4
+symbol PIRIAD = 255
+
+'--------------------------------------------
+   ' variables declarations
+ dim fbrak_fw, fbrak_rev as byte
+ dim motor_stat, interruptcont, cont20m as byte
+ dim current, maxcurrent, avgcurrent as word
+ dim adccont, flags25Pwm as byte
+ dim OCdlay, maxwidth as byte
+ dim PWM_F, PWM_R as byte
+ dim softdl as byte
+ '-----------
+ dim setcurrent as word
+     setPWM as byte
+'----------------------------------------------
+ ' procedures declarations
+ sub procedure Initpwm()
+    OPTION_REG = OPTION_REG and 0xc2    ' Assign prescaler to TMR0
+    T0IE_bit = 1
+    GIE_bit = 1
+ end sub
+ '----------------------------------------------
+ sub procedure interrupt
+  if(T0IF_bit = 1)then
+
+    if( motor_stat =  M_FORWORD)then
+
+      if( HiB = 1)then
+
+           TMR0 = PIRIAD - PWM_F
+           HiB = 0
+
+      else
+        TMR0 = PWM_F
+        HiB = 1
+      end if
+    else
+      if(  motor_stat =  M_REVERSE)then
+
+         if( HiA = 1)then
+           TMR0 = PIRIAD - PWM_R
+           HiA = 0
+         else
+           TMR0 = PWM_R
+           HiA = 1
+         end if
+
+      end if
+    end if
+    T0IF_bit = 0  'Clear the interrupt
+  end if
+  interruptcont = 1
+end sub
+main:
+    ' Main program
+     ANSEL = %00000111
+     ADCON0 = %10000001
+     ADCON1 = %00000000
+     CMCON = $07
+     VRCON = 0x00
+     WPUA = 0
+     ADC_Init()  ' Initialize ADC module
+     PORTA = 0
+     PORTC = %001111
+     TRISA = %000111
+     TRISC = %110000
+     fbrak_fw = 0  fbrak_rev = 0
+     motor_stat =  OFF
+     interruptcont = 0  cont20m = 0
+     OCdlay = 0
+     PWM_F = 0
+     PWM_R = 0
+     softdl = 10
+     flags25Pwm = 0
+     current = 0  maxcurrent = 0  avgcurrent = 0
+     adccont = 0
+     setcurrent = 0   setPWM = 0
+     Initpwm()
+     
+     maxwidth =  PIRIAD - 1
+
+     delay_ms(1000)
+    '---------------- looop for ever ----------------------
+     while(1)
+     
+        if( interruptcont = 1) then
+           interruptcont = 0
+           
+           select case( motor_stat)
+         
+            case OFF      '---- MOTOR OFF
+               maxwidth =  PIRIAD - 1
+               current = 0
+               avgcurrent = 0
+               maxcurrent = 0
+               flags25Pwm = 0
+               
+               HiA = 1     ' OFF
+               HiB = 1     'OFF
+               nop
+               nop
+               delay_ms(10)
+               LowA = 1    'OFF
+               LowB = 1    'OFF
+               delay_ms(10)
+               '--- test SW 1
+               if( MOTOR_FW = 1)then
+                 delay_ms(200)
+                 if( MOTOR_FW = 1)then
+                     LowA = 0  'ON
+                     motor_stat =  M_FORWORD
+                  end if
+               else
+                 PWM_F = 0
+               end if
+                 '--- test SW 2
+              if(  MOTOR_Rev = 1)then
+                delay_ms(200)
+                if(  MOTOR_Rev = 1)then
+                   LowB = 0   'ON
+                   motor_stat =  M_REVERSE
+                end if
+              else
+                  PWM_R = 0
+              end if
+              
+            case M_FORWORD     '----->>
+           
+                '--- test SW 1
+                if( MOTOR_FW = 0)then
+                  delay_ms(100)
+                  if( MOTOR_FW = 0)then
+                    '  maxwidth = PIRIAD - 3
+                     motor_stat =  M_BREAK
+                  end if
+                else
+                   if( flags25Pwm = 255)then
+                      PWM_F = setPWM
+                   else
+                     if(PWM_F < maxwidth) then
+                       inc(PWM_F )
+                     end if
+                     delay_ms(1)
+                   end if
+                end if
+                
+            case  M_REVERSE    '<<-----
+           
+                   '--- test SW 2
+                if( MOTOR_Rev = 0)then
+                  delay_ms(100)
+                  if( MOTOR_Rev = 0)then
+                    ' maxwidth = PIRIAD - 3
+                     motor_stat =  M_BREAK
+                  end if
+                else
+                   if( flags25Pwm = 255)then
+                      PWM_R = setPWM
+                   else
+                     if(PWM_R < maxwidth)then
+                       inc(PWM_R)
+                     end if
+                     delay_ms(1)
+                   end if
+                end if
+                
+            case M_BREAK      '>>---<<
+            
+                  while ( PWM_R > 0)
+                    dec(PWM_R )
+                     delay_us(100)
+                  wend
+                  
+                  while ( PWM_F > 0)
+                     dec( PWM_F)
+                     delay_us(100)
+                  wend
+                  LowA = 1    'OFF
+                  LowB = 1    'OFF
+                  delay_us(100)
+
+                  HiA = 0     'ON
+                  HiB = 0     'ON
+                  delay_ms(10)    'break time
+                  
+                  motor_stat =  OFF
+          
+           end select   'end of the ( select case( motor_stat))
+           
+           current = ADC_Read(2)
+           if(current > maxcurrent)then
+              maxcurrent = current
+           end if
+           inc(adccont)
+           if(adccont > 4)then   '128
+             adccont = 0
+             avgcurrent = maxcurrent
+             maxcurrent = 0
+           end if
+           if( avgcurrent > setcurrent )then
+             flags25Pwm = 255
+           else
+              flags25Pwm = 0
+           end if
+           if( avgcurrent > 600 )then
+            ' motor_stat =  M_BREAK
+           end if
+           setcurrent = ADC_Read(1) >> 2
+           setPWM = ADC_Read(0) >> 2
+           if(setPWM < 100)then
+              setPWM =  100
+           end if
+        end if 'end of the ( interruptcont)
+        
+     wend   ' end of the looop for ever
+end.
